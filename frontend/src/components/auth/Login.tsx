@@ -1,25 +1,47 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppDispatch } from "../../state/store";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../state/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+
+import { setCookie } from "cookies-next";
 
 export default function Login() {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const inputUserMail = useRef(null);
     const inputUserPass = useRef(null);
 
+    const [ error, setError ] = useState('');
+
     const handleLogin = async () => {
-        const usermail = inputUserMail.current.value;
-        const userpass = inputUserPass.current.value;
+        try {
+            const usermail = inputUserMail.current.value;
+            const userpass = inputUserPass.current.value;
 
-        dispatch(updateUser({
-            username: usermail,
-            usermail: usermail
-        }));
+            const res = await fetch('http://localhost:4000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ usermail, userpass })
+            });
 
-        console.log(usermail, userpass);
+            const resData = await res.json();
+
+            if (res.ok) {
+                dispatch(updateUser(resData.user));
+                setCookie('jwt', resData.jwt);
+                navigate('/dashboard');
+            } else {
+                setError(resData.error);
+            }
+        } catch (err) {
+            console.log(err);
+            setError('Internal Error. Please try again.');
+        }
     }
 
     return (
@@ -31,7 +53,7 @@ export default function Login() {
             <div className="flex flex-col justify-center items-start gap-1 text-sm">
                 <input ref={inputUserMail} type="email" placeholder="Email Address" name="usermail" className="px-4 py-2 border-2 border-gray-300 w-[240px]" required />
                 <input ref={inputUserPass} type="password" placeholder="Password" name="userpass" className="px-4 py-2 border-2 border-gray-300 w-[240px]" required />
-                <p className="text-[12px] text-red-500">Error Message</p>
+                <p className="text-[12px] text-red-500">{error}</p>
                 <div className="flex flex-row justify-end items-center w-full">
                     <Link to={'/auth/forget'} className="text-[12px] hover:text-primary duration-300">Forget Password?</Link>
                 </div>

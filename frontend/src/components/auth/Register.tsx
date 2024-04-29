@@ -1,17 +1,41 @@
-import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 
 export default function Register() {
+    const navigate = useNavigate();
+
     const inputUserName = useRef(null);
     const inputUserMail = useRef(null);
     const inputUserPass = useRef(null);
 
-    const handleRegister = async () => {
-        const username = inputUserName.current.value;
-        const usermail = inputUserMail.current.value;
-        const userpass = inputUserPass.current.value;
+    const [ error, setError ] = useState('');
+    const [ message, setMessage ] = useState('');
 
-        console.log(username, usermail, userpass);
+    const handleRegister = async () => {
+        try {
+            const username = inputUserName.current.value;
+            const usermail = inputUserMail.current.value;
+            const userpass = inputUserPass.current.value;
+
+            const res = await fetch('http://localhost:4000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, usermail, userpass })
+            });
+
+            const resData = await res.json();
+
+            if (res.ok) {
+                setMessage(resData.message);
+            } else {
+                setError(resData.error);
+            }
+        } catch (err) {
+            console.log(err);
+            setError('Internal Error. Please try again.');
+        }
     }
 
     return (
@@ -24,7 +48,8 @@ export default function Register() {
                 <input ref={inputUserName} type="text" placeholder="Username" name="username" className="px-4 py-2 border-2 border-gray-300 w-[240px]" required />
                 <input ref={inputUserMail} type="email" placeholder="Email Address" name="usermail" className="px-4 py-2 border-2 border-gray-300 w-[240px]" required />
                 <input ref={inputUserPass} type="password" placeholder="Password" name="userpass" className="px-4 py-2 border-2 border-gray-300 w-[240px]" required />
-                <p className="text-[12px] text-red-500">Error Message</p>
+                <p className="text-[12px] text-red-500">{error}</p>
+                <p className="text-[12px] text-green-500">{message}</p>
                 <button onClick={handleRegister} className="mt-1 px-3 py-1 font-medium border-2 border-primary hover:bg-primary hover:text-white duration-300">Register</button>
             </div>
             <div className="flex flex-row justify-center items-start gap-1 text-[14px] text-gray-500">

@@ -55,7 +55,7 @@ router.post('/register', async (req, res) => {
                 usermail: userdata.usermail
             }
 
-            res.status(200).json({ message: "Registration Successfull" });
+            res.status(200).json({ message: "Registration Successful. You can login now." });
         } else {
             res.status(500).json({ error: "Internal Server Error" });
         }

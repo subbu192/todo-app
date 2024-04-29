@@ -1,14 +1,22 @@
 import { Link } from "react-router-dom";
 import MainLogo from "../assets/mainlogo.svg";
-import { useSelector } from "react-redux";
-import { RootState } from "../state/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../state/store";
+import { updateUser } from "../state/slices/userSlice";
+import { deleteCookie } from "cookies-next";
 
 export default function NavBar() {
     const user = useSelector((state: RootState) => { return state.user });
+    const dispatch = useDispatch<AppDispatch>();
 
-    const username: string = 'Subramanyam';
-
-    const isAuthenticated: boolean = false;
+    const handleLogout = () => {
+        dispatch(updateUser({
+            userid: 0,
+            username: '',
+            usermail: ''
+        }));
+        deleteCookie('jwt');
+    }
 
     return (
         <div className='flex flex-row justify-between items-center bg-white px-7 py-3 mb-2 rounded-md shadow-lg'>
@@ -24,7 +32,7 @@ export default function NavBar() {
                             {user.username}
                         </Link>
                         <p>|</p>
-                        <button className="font-medium hover:text-primary duration-300">Logout</button>
+                        <button onClick={handleLogout} className="font-medium hover:text-primary duration-300">Logout</button>
                     </div>
                 ) : (
                     <div className="flex flex-row justify-center items-center gap-1 text-sm">
