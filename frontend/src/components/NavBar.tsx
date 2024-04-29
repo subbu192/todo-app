@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
 import MainLogo from "../assets/mainlogo.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 export default function NavBar() {
+    const user = useSelector((state: RootState) => { return state.user });
+
     const username: string = 'Subramanyam';
 
-    const isAuthenticated: boolean = true;
+    const isAuthenticated: boolean = false;
 
     return (
         <div className='flex flex-row justify-between items-center bg-white px-7 py-3 mb-2 rounded-md shadow-lg'>
@@ -14,10 +18,10 @@ export default function NavBar() {
             </Link>
 
             {
-                (isAuthenticated) ? (
+                (user.username != '') ? (
                     <div className="flex flex-row justify-center items-center gap-2 text-sm">
                         <Link to={'/dashboard/profile'} className="flex flex-row justify-center items-center gap-2 font-medium hover:text-primary duration-300">
-                            {username}
+                            {user.username}
                         </Link>
                         <p>|</p>
                         <button className="font-medium hover:text-primary duration-300">Logout</button>
