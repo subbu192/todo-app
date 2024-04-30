@@ -3,8 +3,9 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import MainLayout from './components/MainLayout';
-import Dashboard from './components/Dashboard';
 import Loading from './components/Loading';
+import DashboardLayout from './components/dashboard/DashboardLayout';
+import TodosArea from './components/dashboard/TodosArea';
 
 import AuthLayout from './components/auth/AuthLayout';
 import Login from './components/auth/Login';
@@ -15,6 +16,7 @@ import { store } from './state/store';
 
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import NewTodo from './components/dashboard/NewTodo';
 
 export default function App() {
     let persistor = persistStore(store);
@@ -32,7 +34,10 @@ export default function App() {
                                 <Route path='register' element={<Register />} />
                                 <Route path='forget' element={<Forget />} />
                             </Route>
-                            <Route path='dashboard' element={<Dashboard />} />
+                            <Route path='dashboard' element={<DashboardLayout />}>
+                                <Route index element={<TodosArea />} />
+                                <Route path='newtodo' element={<NewTodo />} />
+                            </Route>
                         </Route>
                     </Routes>
                 </BrowserRouter>

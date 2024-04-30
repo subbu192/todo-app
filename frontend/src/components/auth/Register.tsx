@@ -1,11 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 
 import { UserRegisterSchema } from "../../utils/zodSchemas";
 
 export default function Register() {
-    const navigate = useNavigate();
-
     const inputUserName = useRef(null);
     const inputUserMail = useRef(null);
     const inputUserPass = useRef(null);
