@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 
+import { UserRegisterSchema } from "../../utils/zodSchemas";
+
 export default function Register() {
     const navigate = useNavigate();
 
@@ -16,6 +18,12 @@ export default function Register() {
             const username = inputUserName.current.value;
             const usermail = inputUserMail.current.value;
             const userpass = inputUserPass.current.value;
+
+            const zodResult = UserRegisterSchema.safeParse({ username, usermail, userpass });
+            if (!zodResult.success) {
+                setError(zodResult.error.errors[0].message);
+                return;
+            }
 
             const res = await fetch('http://localhost:4000/auth/register', {
                 method: 'POST',

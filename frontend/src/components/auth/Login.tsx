@@ -4,8 +4,8 @@ import { AppDispatch } from "../../state/store";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../state/slices/userSlice";
 import { useNavigate } from "react-router-dom";
-
 import { setCookie } from "cookies-next";
+import { UserLoginSchema } from "../../utils/zodSchemas";
 
 export default function Login() {
     const dispatch = useDispatch<AppDispatch>();
@@ -20,6 +20,12 @@ export default function Login() {
         try {
             const usermail = inputUserMail.current.value;
             const userpass = inputUserPass.current.value;
+
+            const zodResult = UserLoginSchema.safeParse({ usermail, userpass });
+            if (!zodResult.success) {
+                setError(zodResult.error.errors[0].message);
+                return;
+            }
 
             const res = await fetch('http://localhost:4000/auth/login', {
                 method: 'POST',
