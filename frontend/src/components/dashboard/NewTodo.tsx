@@ -5,8 +5,6 @@ export default function NewTodo() {
     const [ newcategory, setNewCategory ] = useState(false);
     const [ priority, setPriority ] = useState(0);
 
-    // TODO: SideBar Mobile View
-
     return (
         <div className='flex flex-col justify-center items-start gap-7 bg-white rounded-md shadow-lg p-10 w-[500px]'>
             <div className="flex flex-col justify-start items-start w-full">

@@ -20,11 +20,10 @@ export default function NavBar() {
 
     return (
         <div className='flex flex-row justify-between items-center bg-white px-7 py-3 mb-2 rounded-md shadow-lg'>
-            <Link to={'/'} className="flex flex-row justify-center items-center gap-2 hover:text-primary duration-300">
+            <Link to={`${(user.username != '') ? "/dashboard" : "/"}`} className="flex flex-row justify-center items-center gap-2 hover:text-primary duration-300">
                 <img src={MainLogo} alt="TODO APP Logo" className="w-7 h-7 object-cover" />
                 <p className="text-xl font-bold">TODO</p>
             </Link>
-
             {
                 (user.username != '') ? (
                     <div className="flex flex-row justify-center items-center gap-2 text-sm">
