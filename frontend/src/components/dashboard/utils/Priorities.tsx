@@ -11,9 +11,9 @@ export default function Priorities() {
                 <h3 className="text-md font-medium">Priority</h3>
             </div>
             <div className="flex flex-row justify-evenly items-center gap-2 w-full text-[12px]">
-                <button className="px-3 py-1 bg-red-300 hover:bg-red-400 rounded-md duration-300">High</button>
-                <button className="px-3 py-1 bg-orange-300 hover:bg-orange-400 rounded-md duration-300">Medium</button>
-                <button className="px-3 py-1 bg-green-300 hover:bg-green-400 rounded-md duration-300">Low</button>
+                <Link to={'/dashboard/priority/1'} className="px-3 py-1 bg-red-300 hover:bg-red-400 rounded-md duration-300">High</Link>
+                <Link to={'/dashboard/priority/2'} className="px-3 py-1 bg-orange-300 hover:bg-orange-400 rounded-md duration-300">Medium</Link>
+                <Link to={'/dashboard/priority/3'} className="px-3 py-1 bg-green-300 hover:bg-green-400 rounded-md duration-300">Low</Link>
             </div>
         </div>
     )

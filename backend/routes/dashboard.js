@@ -1,0 +1,134 @@
+const express = require('express');
+const pool = require('../database/db');
+
+const router = express.Router();
+
+router.post('/getgroups', async (req, res) => {
+    try {
+        const user = req.body.user;
+
+        const resData = await pool.query(`SELECT * FROM groups WHERE group_members LIKE '%"${user.userid}"%'`);
+        if (resData.rowCount) {
+            res.status(200).json({ groupData: resData.rows });
+        } else {
+            res.status(404).json({ error: "User not in any group" });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.post('/getcategories', async (req, res) => {
+    try {
+        const user = req.body.user;
+
+        const resData = await pool.query("SELECT * FROM categories WHERE userid = $1", [user.userid]);
+        if (resData.rowCount) {
+            res.status(200).json({ categoryData: resData.rows });
+        } else {
+            res.status(404).json({ error: "User don't have any categories." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.post('/groups', async (req, res) => {
+    try {
+        const user = req.body.user;
+        const groupid = Number(req.body.groupid);
+
+        const resData = await pool.query(`SELECT group_id FROM groups WHERE group_members LIKE '%"${user.userid}"%'`)
+        
+        if (resData.rowCount) {
+            const groupids = resData.rows.map((group) => {
+                return group.group_id;
+            })
+            if (groupids.includes(groupid)) {
+                const resData = await pool.query("SELECT * FROM todos WHERE todo_group = $1", [groupid]);
+                if (resData.rowCount) {
+                    res.status(200).json({ groupTodos: resData.rows });
+                } else {
+                    res.status(404).json({ error: "Group don't have any todos." });
+                }
+            } else {
+                res.status(403).json({ error: "You don't have permission to this group." });
+            }
+        } else {
+            res.status(404).json({ error: "User don't have any groups." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.post('/categories', async (req, res) => {
+    try {
+        const user = req.body.user;
+        const categoryid = Number(req.body.categoryid);
+
+        const resData = await pool.query(`SELECT category_id FROM categories WHERE userid = $1`, [user.userid]);
+        
+        if (resData.rowCount) {
+            const categoryids = resData.rows.map((category) => {
+                return category.category_id;
+            })
+            if (categoryids.includes(categoryid)) {
+                const resData = await pool.query("SELECT * FROM todos WHERE todo_category = $1", [categoryid]);
+                if (resData.rowCount) {
+                    res.status(200).json({ categoryTodos: resData.rows });
+                } else {
+                    res.status(404).json({ error: "Category don't have any todos." });
+                }
+            } else {
+                res.status(403).json({ error: "You don't have permission to this category." });
+            }
+        } else {
+            res.status(404).json({ error: "User don't have any categories." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.post('/priority', async (req, res) => {
+    try {
+        const user = req.body.user;
+        const priorityid = Number(req.body.priorityid);
+
+        const resData = await pool.query(`SELECT * FROM todos WHERE userid = $1 AND todo_priority = $2`, [user.userid, priorityid]);
+        
+        if (resData.rowCount) {
+            res.status(200).json({ priorityTodos: resData.rows });
+        } else {
+            res.status(404).json({ error: "This Priority don't have any todos." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.post('/gettodo', async (req, res) => {
+    try {
+        const user = req.body.user;
+        const todoid = req.body.todoid;
+
+        const resData = await pool.query("SELECT * FROM todos WHERE userid = $1 AND todo_id = $2", [user.userid, todoid]);
+
+        if (resData.rowCount) {
+            res.status(200).json({ todoData: resData.rows });
+        } else {
+            res.status(404).json({ error: "Requested TODO not found." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+module.exports = router;

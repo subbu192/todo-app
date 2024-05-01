@@ -55,6 +55,10 @@ export default function App() {
                                     <Route index element={<TodoDetails />} />
                                     <Route path=':id' element={<TodoDetails />} />
                                 </Route>
+                                <Route path='todo' element={<TodosLayout />}>
+                                    <Route index element={<TodoDetails />} />
+                                    <Route path=':id' element={<TodoDetails />} />
+                                </Route>
                             </Route>
                         </Route>
                     </Routes>
