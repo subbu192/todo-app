@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,9 +8,55 @@ export default function TodoDetails() {
     const user = useSelector((state: RootState) => { return state.user });
 
     const [ todoData, setTodoData ] = useState([]);
+    const [ gcData, setGCData ] = useState({});
 
     const params = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
+
+    const priorities = ['High', 'Medium', 'Low'];
+    const priorityColor = ['red', 'orange', 'green'];
+
+    const handleDeleteTodo = async () => {
+        try {
+            const res = await fetch('http://localhost:4000/todo/deleteTodo', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user: user, todo: todoData[0] })
+            })
+
+            if (res.ok) {
+                navigate(`/dashboard`);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getGroupAndCategory = async (todo: any) => {
+        // getGC -> get Group and Category
+        try {
+            const res = await fetch('http://localhost:4000/dashboard/getGC', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user: user, todo: todo })
+            })
+
+            if (res.ok) {
+                const resData = await res.json();
+                setGCData(resData.gcData);
+            } else {
+                setGCData({});
+            }
+        } catch (err) {
+            console.log(err);
+            setGCData({});
+        }
+    }
 
     const updateDetails = async () => {
         try {
@@ -25,14 +71,15 @@ export default function TodoDetails() {
                 })
                 if (res.ok) {
                     const resData = await res.json();
+                    getGroupAndCategory(resData.todoData[0]);
                     setTodoData(resData.todoData);
                 } else {
-                    setTodoData({});
+                    setTodoData([]);
                 }
             }
         } catch (err) {
             console.log(err);
-            setTodoData({});
+            setTodoData([]);
         }
     }
 
@@ -41,7 +88,7 @@ export default function TodoDetails() {
     }, [params]);
 
     return (
-        <div className='flex-1 flex flex-col justify-center items-center bg-white rounded-md shadow-lg w-[450px]'>
+        <div className={`flex-1 flex flex-col justify-center items-center bg-white rounded-md shadow-lg w-full`}>
             {
                 (todoData.length != 0) ? (
                     <div className="flex-1 flex flex-col justify-between items-start w-full p-5">
@@ -59,29 +106,29 @@ export default function TodoDetails() {
                                     <p className="text-[14px]">{todoData[0].todo_desc}</p>
                                 </div>
                                 <div className="flex flex-row justify-start items-center gap-3 w-full">
-                                    <h3 className="text-[17px] font-medium w-[100px]">Date</h3>
+                                    <h3 className="text-[17px] font-medium md:w-[100px]">Date</h3>
                                     <p>:</p>
                                     <Link to={'#'} className={`px-3 py-1 text-[13px] bg-gray-300 hover:bg-gray-400 rounded-lg`}>{todoData[0].todo_date}</Link>
                                 </div>
                                 <div className="flex flex-row justify-start items-center gap-3 w-full">
-                                    <h3 className="text-[17px] font-medium w-[100px]">Group</h3>
+                                    <h3 className="text-[17px] font-medium md:w-[100px]">Group</h3>
                                     <p>:</p>
-                                    <Link to={'#'} className={`px-3 py-1 text-[13px] bg-gray-300 hover:bg-gray-400 rounded-lg`}>{todoData[0].todo_group}</Link>
+                                    <Link to={`/dashboard/groups/${todoData[0].todo_group}`} className={`px-3 py-1 text-[13px] bg-gray-300 hover:bg-gray-400 rounded-lg`}>{gcData.groupName}</Link>
                                 </div>
                                 <div className="flex flex-row justify-start items-center gap-3 w-full">
-                                    <h3 className="text-[17px] font-medium w-[100px]">Category</h3>
+                                    <h3 className="text-[17px] font-medium md:w-[100px]">Category</h3>
                                     <p>:</p>
-                                    <Link to={'#'} className={`px-3 py-1 text-[13px] bg-gray-300 hover:bg-gray-400 rounded-lg`}>{todoData[0].todo_category}</Link>
+                                    <Link to={`/dashboard/categories/${todoData[0].todo_category}`} className={`px-3 py-1 text-[13px] bg-gray-300 hover:bg-gray-400 rounded-lg`}>{gcData.categoryName}</Link>
                                 </div>
                                 <div className="flex flex-row justify-start items-center gap-3 w-full">
-                                    <h3 className="text-[17px] font-medium w-[100px]">Priority</h3>
+                                    <h3 className="text-[17px] font-medium md:w-[100px]">Priority</h3>
                                     <p>:</p>
-                                    <Link to={'#'} className={`px-3 py-1 text-[13px] bg-red-300 hover:bg-red-400 rounded-lg`}>{todoData[0].todo_priority}</Link>
+                                    <Link to={`/dashboard/priority/${todoData[0].todo_priority}`} className={`px-3 py-1 text-[13px] bg-${priorityColor[todoData[0].todo_priority - 1]}-300 hover:bg-${priorityColor[todoData[0].todo_priority - 1]}-400 rounded-lg`}>{priorities[todoData[0].todo_priority - 1]}</Link>
                                 </div>
                             </div>
                         </div>
                         <div className="flex flex-row justify-center items-center w-full">
-                            <button className="px-3 py-1 bg-red-300 hover:bg-red-400 rounded-md shadow-lg w-full">Delete this TODO</button>
+                            <button onClick={handleDeleteTodo} className="px-3 py-1 bg-red-300 hover:bg-red-400 rounded-md shadow-lg w-full">Delete this TODO</button>
                         </div>
                     </div>
                 ) : (

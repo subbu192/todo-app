@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, } from 'redux-persist'
 
 import userReducer from './slices/userSlice';
+import viewstateReducer from './slices/viewstateSlice';
 
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from 'redux-persist';
@@ -15,7 +16,8 @@ const persistConfig = {
 };
 
 const reducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    viewstate: viewstateReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

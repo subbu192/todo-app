@@ -15,7 +15,7 @@ export default function MainLayout() {
             <NavBar />
             <div className='flex-1 flex flex-col justify-center items-center'>
                 {
-                    (currPath.startsWith('/auth') && user.username == '') ? <Outlet /> : (user.username != '') ? (currPath.startsWith('/auth')) ? (<Navigate to="/dashboard" />) : <Outlet /> : (currPath.startsWith('/auth') || currPath == '/') ? <Outlet /> : <Navigate to="/auth/login" />
+                    (currPath.startsWith('/auth') && user.username == '') ? <Outlet /> : (user.username != '') ? (currPath.startsWith('/auth') || currPath == '/') ? (<Navigate to="/dashboard" />) : <Outlet /> : (currPath.startsWith('/auth') || currPath == '/') ? <Outlet /> : <Navigate to="/auth/login" />
                 }
             </div>
         </div>

@@ -35,7 +35,6 @@ export default function Categories() {
         populateCategories();
     }, []);
 
-
     return (
         <div className="flex flex-col justify-center items-start gap-2 p-2 w-full">
             <div className="flex flex-row justify-center items-center gap-2">

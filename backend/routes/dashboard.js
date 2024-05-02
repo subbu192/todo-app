@@ -35,6 +35,24 @@ router.post('/getcategories', async (req, res) => {
     }
 })
 
+router.post('/gettodo', async (req, res) => {
+    try {
+        const user = req.body.user;
+        const todoid = req.body.todoid;
+
+        const resData = await pool.query("SELECT * FROM todos WHERE userid = $1 AND todo_id = $2", [user.userid, todoid]);
+
+        if (resData.rowCount) {
+            res.status(200).json({ todoData: resData.rows });
+        } else {
+            res.status(404).json({ error: "Requested TODO not found." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
 router.post('/groups', async (req, res) => {
     try {
         const user = req.body.user;
@@ -113,17 +131,40 @@ router.post('/priority', async (req, res) => {
     }
 })
 
-router.post('/gettodo', async (req, res) => {
+router.post('/todos', async (req, res) => {
     try {
         const user = req.body.user;
-        const todoid = req.body.todoid;
 
-        const resData = await pool.query("SELECT * FROM todos WHERE userid = $1 AND todo_id = $2", [user.userid, todoid]);
-
+        const resData = await pool.query(`SELECT * FROM todos WHERE userid = $1`, [user.userid]);
+        
         if (resData.rowCount) {
-            res.status(200).json({ todoData: resData.rows });
+            res.status(200).json({ todosData: resData.rows });
         } else {
-            res.status(404).json({ error: "Requested TODO not found." });
+            res.status(404).json({ error: "This User don't have any todos." });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+router.post('/getGC', async (req, res) => {
+    // getGC -> get Group and Category
+    try {
+        const user = req.body.user;
+        const todo = req.body.todo;
+
+        const resData1 = await pool.query(`SELECT group_name FROM groups WHERE group_id = $1`, [todo.todo_group]);
+        const resData2 = await pool.query("SELECT category_name FROM categories WHERE category_id = $1", [todo.todo_category]);
+        
+        if (resData1.rowCount && resData2.rowCount) {
+            const gcData = {
+                groupName: resData1.rows[0].group_name,
+                categoryName: resData2.rows[0].category_name 
+            };
+            res.status(200).json({ gcData: gcData });
+        } else {
+            res.status(404).json({ error: "This Group or Category don't exists." });
         }
     } catch (err) {
         console.log(err);

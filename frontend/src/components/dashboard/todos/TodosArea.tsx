@@ -5,10 +5,11 @@ import { Link, useLocation, useParams } from "react-router-dom"
 
 export default function TodosArea() {
     const user = useSelector((state: RootState) => { return state.user });
+
     const params = useParams();
     const location = useLocation();
 
-    const [ showNav, setShowNav ] = useState(false);
+    // const [ showNav, setShowNav ] = useState(false);
     const [ todos, setTodos ] = useState([]);
 
     const populateTodos = async () => {
@@ -67,9 +68,30 @@ export default function TodosArea() {
         populateTodos();
     }, [params]);
 
+    const populateTodosInit = async () => {
+        const res = await fetch('http://localhost:4000/dashboard/todos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user: user })
+        })
+        if (res.ok) {
+            const resData = await res.json();
+            setTodos(resData.todosData);
+        } else {
+            console.log('Hello ');
+            setTodos([]);
+        }
+    }
+
+    useEffect(() => {
+        populateTodosInit();
+    }, [])
+
     return (
-        <div className='flex-1 flex flex-col justify-start items-start gap-5 bg-white rounded-md shadow-lg p-5 w-full'>
-            <div className="flex flex-col justify-start items-start">
+        <div className={`flex-1 flex flex-col justify-start items-start gap-5 bg-white rounded-md shadow-lg p-5 w-full`}>
+            <div className="flex flex-col justify-start items-start w-full">
                 <h2 className="text-xl font-semibold border-l-4 border-black px-3">Your TODOs</h2>
             </div>
             <div className="flex-1 flex flex-col justify-start items-start gap-2 w-full">
