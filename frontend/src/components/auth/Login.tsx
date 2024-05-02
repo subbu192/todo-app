@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { setCookie } from "cookies-next";
 import { UserLoginSchema } from "../../utils/zodSchemas";
 
+import { SERVER_DOMAIN } from "../../assets/config";
+
 export default function Login() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
@@ -27,7 +29,7 @@ export default function Login() {
                 return;
             }
 
-            const res = await fetch('http://localhost:4000/auth/login', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

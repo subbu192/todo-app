@@ -1,16 +1,18 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import GroupsIcon from "../../../assets/groups.svg";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 
-export default function Groups(props) {
+import { SERVER_DOMAIN } from "../../../assets/config";
+
+export default function Groups() {
     const user = useSelector((state: RootState) => { return state.user });
 
     const populateGroups = async () => {
         try {
-            const res = await fetch('http://localhost:4000/dashboard/getgroups', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getgroups`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

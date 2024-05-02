@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 
+import { SERVER_DOMAIN } from "../../../assets/config";
+
 export default function Categories() {
     const user = useSelector((state: RootState) => { return state.user });
     const [ categories, setCategories ] = useState([]);
 
     const populateCategories = async () => {
         try {
-            const res = await fetch('http://localhost:4000/dashboard/getcategories', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getcategories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

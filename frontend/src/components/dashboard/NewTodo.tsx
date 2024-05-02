@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
-import { useNavigate } from "react-router-dom";
 import { TodoSchema } from "../../utils/zodSchemas";
+
+import { SERVER_DOMAIN } from "../../assets/config";
 
 export default function NewTodo() {
     const user = useSelector((state: RootState) => { return state.user });
-    const navigate = useNavigate();
 
     const [ newgroup, setNewGroup ] = useState(false);
     const [ newcategory, setNewCategory ] = useState(false);
@@ -27,7 +27,7 @@ export default function NewTodo() {
 
     const populateGroups = async () => {
         try {
-            const res = await fetch('http://localhost:4000/dashboard/getgroups', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getgroups`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default function NewTodo() {
 
     const populateCategories = async () => {
         try {
-            const res = await fetch('http://localhost:4000/dashboard/getcategories', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getcategories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export default function NewTodo() {
 
     const addNewGroup = async () => {
         try {
-            const res = await fetch('http://localhost:4000/todo/newgroup', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/todo/newgroup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export default function NewTodo() {
 
     const addNewCategory = async () => {
         try {
-            const res = await fetch('http://localhost:4000/todo/newcategory', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/todo/newcategory`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export default function NewTodo() {
                 return;
             }
 
-            const res = await fetch('http://localhost:4000/todo/newtodo', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/todo/newtodo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,24 +160,24 @@ export default function NewTodo() {
             <div className="flex flex-col justify-start items-start gap-6 text-sm w-full">
                 <div className="flex flex-col justify-start items-start gap-2 w-full">
                     <div className="flex flex-row justify-start items-center gap-2 w-full">
-                        <h3 className="w-[100px] text-md font-medium">Title</h3>
+                        <h3 className="md:w-[100px] text-md font-medium">Title</h3>
                         <p>:</p>
                         <input ref={titleInput} type="text" placeholder="TODO Title" className="flex-1 px-3 py-1 border-2 border-gray-400" required />
                     </div>
                     <div className="flex flex-row justify-start items-center gap-2 w-full">
-                        <h3 className="w-[100px] text-md font-medium">Description</h3>
+                        <h3 className="md:w-[100px] text-md font-medium">Description</h3>
                         <p>:</p>
                         <input ref={descInput} type="text" placeholder="TODO Description" className="flex-1 px-3 py-1 border-2 border-gray-400" required />
                     </div>
                     <div className="flex flex-row justify-start items-center gap-2 w-full">
-                        <h3 className="w-[100px] text-md font-medium">Date</h3>
+                        <h3 className="md:w-[100px] text-md font-medium">Date</h3>
                         <p>:</p>
                         <input ref={dateInput} type="date" className="flex-1 px-3 py-1 border-2 border-gray-400 w-full" required />
                     </div>
                 </div>
                 <div className="flex flex-col justify-start items-start gap-2 w-full">
                     <div className={`flex flex-row justify-start items-center gap-2 w-full`}>
-                        <h3 className="w-[100px] text-md font-medium">Group</h3>
+                        <h3 className="md:w-[100px] text-md font-medium">Group</h3>
                         <p>:</p>
                         <div className="flex-1 flex flex-row justify-center items-center gap-2">
                             <select ref={groupInput} name="group" className="flex-1 px-3 py-1 border-2 border-gray-400">
@@ -200,7 +200,7 @@ export default function NewTodo() {
                 </div>
                 <div className="flex flex-col justify-start items-start gap-2 w-full">
                     <div className={`flex flex-row justify-start items-center gap-2 w-full`}>
-                        <h3 className="w-[100px] text-md font-medium">Category</h3>
+                        <h3 className="md:w-[100px] text-md font-medium">Category</h3>
                         <p>:</p>
                         <div className="flex-1 flex flex-row justify-center items-center gap-2">
                             <select ref={categoryInput} name="category" className="flex-1 px-3 py-1 border-2 border-gray-400">
@@ -223,7 +223,7 @@ export default function NewTodo() {
                 </div>
                 <div className="flex flex-col justify-start items-start gap-2 w-full">
                     <div className={`flex flex-row justify-start items-center gap-2 w-full`}>
-                        <h3 className="w-[100px] text-md font-medium">Priority</h3>
+                        <h3 className="md:w-[100px] text-md font-medium">Priority</h3>
                         <p>:</p>
                         <div className="flex-1 flex flex-row justify-start items-center gap-2">
                             <button onClick={() => { setPriority(1); }} className={`${(priority == 1) ? "bg-red-400 border-red-600" : "bg-red-300 border-white" } px-3 py-1 border-2 hover:bg-red-400 duration-300 rounded-md`}>High</button>

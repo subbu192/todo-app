@@ -3,6 +3,8 @@ import { useRef, useState } from "react";
 
 import { UserRegisterSchema } from "../../utils/zodSchemas";
 
+import { SERVER_DOMAIN } from "../../assets/config";
+
 export default function Register() {
     const inputUserName = useRef(null);
     const inputUserMail = useRef(null);
@@ -23,7 +25,7 @@ export default function Register() {
                 return;
             }
 
-            const res = await fetch('http://localhost:4000/auth/register', {
+            const res = await fetch(`http://${SERVER_DOMAIN}/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

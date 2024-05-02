@@ -10,8 +10,6 @@ import { RootState } from "../../state/store";
 export default function SideBar() {
     const viewstate = useSelector((state: RootState) => { return state.viewstate });
 
-    // TODO: SideBar Mobile View
-
     return (
         <div className={`${(viewstate.sidebar) ? "flex" : "hidden md:flex"} z-10 flex flex-col justify-between items-start bg-white rounded-md shadow-lg p-3`}>
             <div className="flex flex-col justify-center items-start w-full">

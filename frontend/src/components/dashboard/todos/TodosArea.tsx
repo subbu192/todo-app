@@ -9,7 +9,6 @@ export default function TodosArea() {
     const params = useParams();
     const location = useLocation();
 
-    // const [ showNav, setShowNav ] = useState(false);
     const [ todos, setTodos ] = useState([]);
 
     const populateTodos = async () => {
