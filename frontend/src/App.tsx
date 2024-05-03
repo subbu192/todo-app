@@ -19,6 +19,7 @@ import { persistStore } from 'redux-persist';
 import NewTodo from './components/dashboard/NewTodo';
 import TodosLayout from './components/dashboard/todos/TodosLayout';
 import TodoDetails from './components/dashboard/todos/TodoDetails';
+import ErrorPage from './components/ErrorPage';
 
 export default function App() {
     let persistor = persistStore(store);
@@ -61,6 +62,7 @@ export default function App() {
                                 </Route>
                             </Route>
                         </Route>
+                        <Route path='*' element={<ErrorPage />} />
                     </Routes>
                 </BrowserRouter>
             </PersistGate>
