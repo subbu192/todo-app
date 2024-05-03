@@ -4,5 +4,3 @@ CREATE TABLE groups (
     group_members VARCHAR(255) NOT NULL,
     userid INT REFERENCES users(userid)
 );
-
-INSERT INTO groups (group_name, group_members, userid) VALUES ('CSE-C', '{"2":"Deepika","1":"Subbu"}', 2);

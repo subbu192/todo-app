@@ -8,5 +8,3 @@ CREATE TABLE todos (
     todo_priority INT NOT NULL CHECK((todo_priority>=0) and (todo_priority<=3)),
     userid INT REFERENCES users(userid)
 );
-
-INSERT INTO todos (todo_title, todo_desc, todo_date, todo_group, todo_category, todo_priority, userid) VALUES ('Drink Water', 'I will drink 6L of Water today.', '01-05-2024', 1, 3, 1, 2);
