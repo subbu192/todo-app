@@ -4,12 +4,18 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 import { getCookie } from "cookies-next";
+import { SERVER_DOMAIN } from "../../../assets/config";
+
+interface GCData {
+    groupName: string,
+    categoryName: string
+}
 
 export default function TodoDetails() {
     const user = useSelector((state: RootState) => { return state.user });
 
     const [ todoData, setTodoData ] = useState([]);
-    const [ gcData, setGCData ] = useState({});
+    const [ gcData, setGCData ] = useState<GCData>({ groupName: '', categoryName: '' });
 
     const params = useParams();
     const location = useLocation();
@@ -22,7 +28,7 @@ export default function TodoDetails() {
 
     const handleDeleteTodo = async () => {
         try {
-            const res = await fetch('http://localhost:4000/todo/deleteTodo', {
+            const res = await fetch(`${SERVER_DOMAIN}/todo/deleteTodo`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +48,7 @@ export default function TodoDetails() {
     const getGroupAndCategory = async (todo: any) => {
         // getGC -> get Group and Category
         try {
-            const res = await fetch('http://localhost:4000/dashboard/getGC', {
+            const res = await fetch(`${SERVER_DOMAIN}/dashboard/getGC`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,11 +61,11 @@ export default function TodoDetails() {
                 const resData = await res.json();
                 setGCData(resData.gcData);
             } else {
-                setGCData({});
+                setGCData({ groupName: '', categoryName: '' });
             }
         } catch (err) {
             console.log(err);
-            setGCData({});
+            setGCData({ groupName: '', categoryName: '' });
         }
     }
 
@@ -67,7 +73,7 @@ export default function TodoDetails() {
         try {
             const currPath = location.pathname;
             if (currPath.startsWith('/dashboard/todo')) {
-                const res = await fetch('http://localhost:4000/dashboard/gettodo', {
+                const res = await fetch(`${SERVER_DOMAIN}/dashboard/gettodo`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

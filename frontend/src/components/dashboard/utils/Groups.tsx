@@ -15,7 +15,7 @@ export default function Groups() {
         try {
             const jwtToken = getCookie('jwt');
 
-            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getgroups`, {
+            const res = await fetch(`${SERVER_DOMAIN}/dashboard/getgroups`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

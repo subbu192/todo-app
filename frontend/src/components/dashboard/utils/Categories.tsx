@@ -16,7 +16,7 @@ export default function Categories() {
         try {
             const jwtToken = getCookie('jwt');
 
-            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getcategories`, {
+            const res = await fetch(`${SERVER_DOMAIN}/dashboard/getcategories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

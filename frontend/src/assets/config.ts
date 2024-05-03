@@ -1,1 +1,1 @@
-export const SERVER_DOMAIN = 'localhost:4000';
+export const SERVER_DOMAIN = 'https://todo-app-backend-rel6.onrender.com';

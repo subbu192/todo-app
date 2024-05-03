@@ -4,8 +4,11 @@ import { RootState } from "../../../state/store";
 import { Link, useLocation, useParams } from "react-router-dom"
 import { getCookie } from "cookies-next";
 
+import { SERVER_DOMAIN } from "../../../assets/config";
+
 export default function TodosArea() {
     const user = useSelector((state: RootState) => { return state.user });
+    const viewstate = useSelector((state: RootState) => { return state.viewstate });
 
     const params = useParams();
     const location = useLocation();
@@ -14,13 +17,11 @@ export default function TodosArea() {
 
     const jwtToken = getCookie('jwt');
 
-    // auth middleware not working propoy
-
     const populateTodos = async () => {
         try {
             const currPath = location.pathname;
             if (currPath.startsWith('/dashboard/groups')) {
-                const res = await fetch('http://localhost:4000/dashboard/groups', {
+                const res = await fetch(`${SERVER_DOMAIN}/dashboard/groups`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -35,7 +36,7 @@ export default function TodosArea() {
                     setTodos([]);
                 }
             } else if (currPath.startsWith('/dashboard/categories')) {
-                const res = await fetch('http://localhost:4000/dashboard/categories', {
+                const res = await fetch(`${SERVER_DOMAIN}/dashboard/categories`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export default function TodosArea() {
                     setTodos([]);
                 }
             } else if (currPath.startsWith('/dashboard/priority')) {
-                const res = await fetch('http://localhost:4000/dashboard/priority', {
+                const res = await fetch(`${SERVER_DOMAIN}/dashboard/priority`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ export default function TodosArea() {
     }, [params]);
 
     const populateTodosInit = async () => {
-        const res = await fetch('http://localhost:4000/dashboard/todos', {
+        const res = await fetch(`${SERVER_DOMAIN}/dashboard/todos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,9 +111,9 @@ export default function TodosArea() {
                                 <Link key={todo.todo_id} to={`/dashboard/todo/${todo.todo_id}`} className="flex flex-col justify-center items-start gap-1 border-2 border-gray-400 p-3 w-full hover:bg-gray-200 duration-300">
                                     <div className="flex flex-row justify-between items-center w-full">
                                         <h3 className="text-lg font-medium">{todo.todo_title}</h3>
-                                        <p className="text-[13px]">{todo.todo_date}</p>
+                                        <p className={`${((viewstate.sidebar) ? "hidden md:block" : "block")} text-[13px]`}>{todo.todo_date}</p>
                                     </div>
-                                    <p className="text-sm">{todo.todo_desc}</p>
+                                    <p className={`text-sm`}>{todo.todo_desc}</p>
                                 </Link>
                             )
                         })

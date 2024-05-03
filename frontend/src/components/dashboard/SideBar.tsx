@@ -11,7 +11,7 @@ export default function SideBar() {
     const viewstate = useSelector((state: RootState) => { return state.viewstate });
 
     return (
-        <div className={`${(viewstate.sidebar) ? "flex" : "hidden md:flex"} z-10 flex flex-col justify-between items-start bg-white rounded-md shadow-lg p-3`}>
+        <div className={`${(viewstate.sidebar) ? "flex" : "hidden md:flex"} z-10 flex flex-col justify-start md:justify-between items-start bg-white rounded-md shadow-lg p-3`}>
             <div className="flex flex-col justify-center items-start w-full">
                 <Groups />
                 <Categories />
@@ -20,7 +20,7 @@ export default function SideBar() {
             <div className="flex flex-col justify-center items-start gap-4 p-2 w-full">
                 <div className="flex flex-row justify-center items-center gap-2">
                     <img src={NewTodoIcon} alt="Groups" className="w-5" />
-                    <Link to={'/dashboard/newtodo'} className="text-md font-medium hover:text-primary duration-300">New TODO</Link>
+                    <Link to={'/dashboard/newtodo'} className="text-md font-medium hover:text-primary duration-300">New <span className="hidden md:block">TODO</span></Link>
                 </div>
             </div>
         </div>

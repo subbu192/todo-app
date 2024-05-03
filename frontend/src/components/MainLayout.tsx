@@ -11,7 +11,7 @@ export default function MainLayout() {
     const currPath = location.pathname;
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-300 p-3">
+        <div className="flex flex-col h-screen bg-gray-300 p-3">
             <NavBar />
             <div className='flex-1 flex flex-col justify-center items-center'>
                 {

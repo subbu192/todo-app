@@ -20,7 +20,7 @@ export default function DashboardLayout() {
     return (
         <div className="flex-1 flex flex-row gap-2 w-full">
             <SideBar />
-            <div className={`flex-1 flex flex-col justify-center items-center`}>
+            <div className={`flex-1 flex flex-col justify-center items-center w-full`}>
                 <Outlet />
             </div>
         </div>

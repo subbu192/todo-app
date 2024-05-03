@@ -8,6 +8,7 @@ import { getCookie } from "cookies-next";
 
 export default function NewTodo() {
     const user = useSelector((state: RootState) => { return state.user });
+    const viewstate = useSelector((state: RootState) => { return state.viewstate });
 
     const [ newgroup, setNewGroup ] = useState(false);
     const [ newcategory, setNewCategory ] = useState(false);
@@ -30,7 +31,7 @@ export default function NewTodo() {
 
     const populateGroups = async () => {
         try {
-            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getgroups`, {
+            const res = await fetch(`${SERVER_DOMAIN}/dashboard/getgroups`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ export default function NewTodo() {
 
     const populateCategories = async () => {
         try {
-            const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getcategories`, {
+            const res = await fetch(`${SERVER_DOMAIN}/dashboard/getcategories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ export default function NewTodo() {
 
     const addNewGroup = async () => {
         try {
-            const res = await fetch(`http://${SERVER_DOMAIN}/todo/newgroup`, {
+            const res = await fetch(`${SERVER_DOMAIN}/todo/newgroup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +103,7 @@ export default function NewTodo() {
 
     const addNewCategory = async () => {
         try {
-            const res = await fetch(`http://${SERVER_DOMAIN}/todo/newcategory`, {
+            const res = await fetch(`${SERVER_DOMAIN}/todo/newcategory`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +140,7 @@ export default function NewTodo() {
                 return;
             }
 
-            const res = await fetch(`http://${SERVER_DOMAIN}/todo/newtodo`, {
+            const res = await fetch(`${SERVER_DOMAIN}/todo/newtodo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ export default function NewTodo() {
     }
 
     return (
-        <div className='flex flex-col justify-center items-start gap-7 bg-white rounded-md shadow-lg p-10'>
+        <div className={`${(viewstate.sidebar) ? "hidden md:flex" : "flex"} flex-col justify-center items-start gap-7 bg-white rounded-md shadow-lg px-3 py-4`}>
             <div className="flex flex-col justify-start items-start w-full">
                 <h2 className="text-xl font-medium border-b-2 border-black">New TODO</h2>
             </div>
