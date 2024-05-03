@@ -4,6 +4,7 @@ import { RootState } from "../../state/store";
 import { TodoSchema } from "../../utils/zodSchemas";
 
 import { SERVER_DOMAIN } from "../../assets/config";
+import { getCookie } from "cookies-next";
 
 export default function NewTodo() {
     const user = useSelector((state: RootState) => { return state.user });
@@ -25,12 +26,15 @@ export default function NewTodo() {
     const [ groups, setGroups ] = useState([]);
     const [ categories, setCategories ] = useState([]);
 
+    const jwtToken = getCookie('jwt');
+
     const populateGroups = async () => {
         try {
             const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getgroups`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user })
             })
@@ -53,6 +57,7 @@ export default function NewTodo() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user })
             })
@@ -80,6 +85,7 @@ export default function NewTodo() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user, groupName: newGroupInput.current.value })
             })
@@ -100,6 +106,7 @@ export default function NewTodo() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user, categoryName: newCategoryInput.current.value })
             })
@@ -136,6 +143,7 @@ export default function NewTodo() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user, todo: newTodo })
             })

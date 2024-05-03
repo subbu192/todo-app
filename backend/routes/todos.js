@@ -1,9 +1,10 @@
 const express = require('express');
 const pool = require('../database/db');
+const authMiddleware = require('./middleware');
 
 const router = express.Router();
 
-router.post('/newgroup', async (req, res) => {
+router.post('/newgroup', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const groupName = req.body.groupName;
@@ -23,7 +24,7 @@ router.post('/newgroup', async (req, res) => {
     }
 })
 
-router.post('/newcategory', async (req, res) => {
+router.post('/newcategory', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const categoryName = req.body.categoryName;
@@ -40,7 +41,7 @@ router.post('/newcategory', async (req, res) => {
     }
 })
 
-router.post('/newtodo', async (req, res) => {
+router.post('/newtodo', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const todo = req.body.todo;
@@ -61,7 +62,7 @@ router.post('/newtodo', async (req, res) => {
     }
 })
 
-router.delete('/deleteTodo', async (req, res) => {
+router.delete('/deleteTodo', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const todo = req.body.todo;

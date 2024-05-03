@@ -1,9 +1,10 @@
 const express = require('express');
 const pool = require('../database/db');
+const authMiddleware = require('./middleware');
 
 const router = express.Router();
 
-router.post('/getgroups', async (req, res) => {
+router.post('/getgroups', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
 
@@ -19,7 +20,7 @@ router.post('/getgroups', async (req, res) => {
     }
 })
 
-router.post('/getcategories', async (req, res) => {
+router.post('/getcategories', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
 
@@ -35,7 +36,7 @@ router.post('/getcategories', async (req, res) => {
     }
 })
 
-router.post('/gettodo', async (req, res) => {
+router.post('/gettodo', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const todoid = req.body.todoid;
@@ -53,7 +54,7 @@ router.post('/gettodo', async (req, res) => {
     }
 })
 
-router.post('/groups', async (req, res) => {
+router.post('/groups', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const groupid = Number(req.body.groupid);
@@ -83,7 +84,7 @@ router.post('/groups', async (req, res) => {
     }
 })
 
-router.post('/categories', async (req, res) => {
+router.post('/categories', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const categoryid = Number(req.body.categoryid);
@@ -113,7 +114,7 @@ router.post('/categories', async (req, res) => {
     }
 })
 
-router.post('/priority', async (req, res) => {
+router.post('/priority', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
         const priorityid = Number(req.body.priorityid);
@@ -131,7 +132,7 @@ router.post('/priority', async (req, res) => {
     }
 })
 
-router.post('/todos', async (req, res) => {
+router.post('/todos', authMiddleware, async (req, res) => {
     try {
         const user = req.body.user;
 
@@ -148,7 +149,7 @@ router.post('/todos', async (req, res) => {
     }
 })
 
-router.post('/getGC', async (req, res) => {
+router.post('/getGC', authMiddleware, async (req, res) => {
     // getGC -> get Group and Category
     try {
         const user = req.body.user;

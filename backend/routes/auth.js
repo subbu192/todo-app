@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
                     usermail: userdata.usermail
                 }
 
-                const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: 60 * 5 });
+                const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: 60 * 10 });
 
                 res.status(200).json({ user: user, jwt: token });
             } else {
@@ -58,29 +58,6 @@ router.post('/register', async (req, res) => {
             res.status(200).json({ message: "Registration Successful. You can login now." });
         } else {
             res.status(500).json({ error: "Internal Server Error" });
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
-router.post('/verify', async (req, res) => {
-    try {
-        const { user, token } = req.body;
-
-        const resData = jwt.verify(token, process.env.JWT_SECRET);
-        const decoded = {
-            userid: resData.userid,
-            username: resData.username,
-            usermail: resData.usermail
-        };
-
-        console.log(decoded, user);
-        if (JSON.stringify(decoded) == JSON.stringify(user)) {
-            res.status(200).json(req.body);
-        } else {
-            res.status(401).json({ error: "JWT mismatch" });
         }
     } catch (err) {
         console.log(err);

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
+import { getCookie } from "cookies-next";
 
 export default function TodoDetails() {
     const user = useSelector((state: RootState) => { return state.user });
@@ -17,12 +18,15 @@ export default function TodoDetails() {
     const priorities = ['High', 'Medium', 'Low'];
     const priorityColor = ['red', 'orange', 'green'];
 
+    const jwtToken = getCookie('jwt');
+
     const handleDeleteTodo = async () => {
         try {
             const res = await fetch('http://localhost:4000/todo/deleteTodo', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user: user, todo: todoData[0] })
             })
@@ -42,6 +46,7 @@ export default function TodoDetails() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user: user, todo: todo })
             })
@@ -66,6 +71,7 @@ export default function TodoDetails() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwtToken}`
                     },
                     body: JSON.stringify({ user: user, todoid: params.id })
                 })

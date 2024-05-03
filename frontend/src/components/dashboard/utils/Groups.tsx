@@ -6,16 +6,20 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 
 import { SERVER_DOMAIN } from "../../../assets/config";
+import { getCookie } from "cookies-next";
 
 export default function Groups() {
     const user = useSelector((state: RootState) => { return state.user });
 
     const populateGroups = async () => {
         try {
+            const jwtToken = getCookie('jwt');
+
             const res = await fetch(`http://${SERVER_DOMAIN}/dashboard/getgroups`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwtToken}`
                 },
                 body: JSON.stringify({ user })
             })

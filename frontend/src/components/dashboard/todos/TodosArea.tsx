@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 import { Link, useLocation, useParams } from "react-router-dom"
+import { getCookie } from "cookies-next";
 
 export default function TodosArea() {
     const user = useSelector((state: RootState) => { return state.user });
@@ -11,6 +12,10 @@ export default function TodosArea() {
 
     const [ todos, setTodos ] = useState([]);
 
+    const jwtToken = getCookie('jwt');
+
+    // auth middleware not working propoy
+
     const populateTodos = async () => {
         try {
             const currPath = location.pathname;
@@ -19,6 +24,7 @@ export default function TodosArea() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwtToken}`
                     },
                     body: JSON.stringify({ user: user, groupid: params.id })
                 })
@@ -33,6 +39,7 @@ export default function TodosArea() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwtToken}`
                     },
                     body: JSON.stringify({ user: user, categoryid: params.id })
                 })
@@ -47,6 +54,7 @@ export default function TodosArea() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwtToken}`
                     },
                     body: JSON.stringify({ user: user, priorityid: params.id })
                 })
@@ -72,6 +80,7 @@ export default function TodosArea() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`
             },
             body: JSON.stringify({ user: user })
         })
